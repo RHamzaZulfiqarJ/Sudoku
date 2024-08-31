@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import Game from './Game'
 
-const page = () => {
+const Page = () => {
 
   const [fade, setFade] = useState<Boolean>(false);
 
@@ -23,4 +23,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page
