@@ -35,7 +35,7 @@ const VideoCanvas = () => {
     <div className="absolute top-0 left-0 w-full h-full overflow-hidden">
       <video
         ref={videoRef}
-        src="/background.mp4"
+        src="/Background.mp4"
         muted
         loop
         playsInline
