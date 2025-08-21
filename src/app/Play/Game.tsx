@@ -56,7 +56,6 @@ const Game = () => {
     return true;
   };
 
-  // Solve the puzzle
   const solve = (grid: Cell[][]) => {
     for (let row = 0; row < 9; row++) {
       for (let col = 0; col < 9; col++) {
@@ -77,7 +76,6 @@ const Game = () => {
     return true;
   };
 
-  // Automatically solve the puzzle
   const autoSolver = () => {
     const newGrid = grid.map((row) => row.map((cell) => ({ ...cell })));
     if (solve(newGrid)) {
@@ -87,7 +85,6 @@ const Game = () => {
     return false;
   };
 
-  // Check if the current grid is valid
   const check = () => {
     for (let row = 0; row < 9; row++) {
       for (let col = 0; col < 9; col++) {
@@ -108,8 +105,8 @@ const Game = () => {
   };
 
   return (
-    <div className="flex flex-col gap-10 items-center">
-      <div className="grid grid-cols-9 gap-1 max-w-sm mx-auto mt-10">
+    <div className="flex flex-col md:gap-10 gap-8 items-center w-screen">
+      <div className="grid grid-cols-9 gap-1 max-w-sm mx-2 md:mt-10">
         {grid.map((row, rowIndex) =>
           row.map((cell, colIndex) => (
             <input
@@ -118,7 +115,7 @@ const Game = () => {
               maxLength={1}
               value={cell.value !== null ? cell.value : ""}
               onChange={(e) => handleChange(rowIndex, colIndex, e.target.value)}
-              disabled={!cell.editable} // Disable input for non-editable cells
+              disabled={!cell.editable}
               className={`md:w-10 md:h-10 w-8 h-8 text-center border ${
                 cell.editable ? "bg-transparent border-gray-300" : "bg-transparent"
               } rounded-md text-white`}
@@ -126,26 +123,28 @@ const Game = () => {
           ))
         )}
       </div>
-      <div className="flex flex-row gap-10">
-        <div
-          onClick={() =>
-            setGrid(
-              generateSudoku().map((row) =>
-                row.map((cell) => ({ value: cell, editable: cell === null }))
+      <div className="flex md:flex-row flex-col md:gap-10 gap-5">
+        <div className="flex flex-row gap-10">
+          <div
+            onClick={() =>
+              setGrid(
+                generateSudoku().map((row) =>
+                  row.map((cell) => ({ value: cell, editable: cell === null }))
+                )
               )
-            )
-          }>
-          <Button text="New Game" />
-        </div>
-        <div
-          onClick={() => {
-            if (check()) {
-              toast.success("Correct!");
-            } else {
-              toast.error("Incorrect!");
-            }
-          }}>
-          <Button text="Solve" />
+            }>
+            <Button optional={true} text="New Game" />
+          </div>
+          <div
+            onClick={() => {
+              if (check()) {
+                toast.success("Correct!");
+              } else {
+                toast.error("Incorrect!");
+              }
+            }}>
+            <Button optional={true} text="Solve" />
+          </div>
         </div>
         <div
           onClick={() => {
@@ -155,7 +154,7 @@ const Game = () => {
               toast.error("No solution found!");
             }
           }}>
-          <Button text="Auto Solve" />
+          <Button optional={true} text="Auto Solve" />
         </div>
       </div>
     </div>

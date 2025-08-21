@@ -1,26 +1,38 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 const Video = () => {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
   useEffect(() => {
-    // Get the video element and set its source
-    const videoElement = document.getElementById("bg-video") as HTMLVideoElement;
-    if (videoElement) {
-      videoElement.src = atob("L2JhY2tncm91bmQubXA0"); // "/background.mp4" encoded in Base64
-    }
+    const video = videoRef.current;
+    const canvas = canvasRef.current;
+    const ctx = canvas?.getContext("2d");
+
+    if (!video || !canvas || !ctx) return;
+
+    video.play();
+
+    const draw = () => {
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+      requestAnimationFrame(draw);
+    };
+    draw();
   }, []);
 
   return (
-    <div>
+    <div className="absolute top-0 left-0 w-full h-full">
       <video
-        id="bg-video"
-        className="absolute top-0 left-0 w-full h-full object-cover"
-        autoPlay
-        loop
-        disablePictureInPicture
+        ref={videoRef}
+        src="/background.mp4"
         muted
-        playsInline></video>
+        loop
+        playsInline
+        style={{ display: "none" }}
+      />
+      <canvas ref={canvasRef} width={1920} height={1080} className="w-full h-full object-cover" />
     </div>
   );
 };

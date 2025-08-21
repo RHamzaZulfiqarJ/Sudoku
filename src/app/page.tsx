@@ -9,17 +9,7 @@ import Loading from "@/components/Loading";
 
 const Home = () => {
   const [fade, setFade] = useState<Boolean>(false);
-  const [loading, setLoading] = useState<Boolean>(false);
   const router = useRouter();
-
-  useEffect(() => {
-    // Show the loading screen for 3 seconds
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 3000);
-
-    return () => clearTimeout(timer);
-  }, []);
 
   const handleClick = () => {
     setFade(true);
@@ -27,10 +17,6 @@ const Home = () => {
       router.push("/Play");
     }, 1000);
   };
-
-  if(loading) {
-    return <Loading />
-  }
 
   return (
     <div className="relative h-screen">
