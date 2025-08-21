@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 
-const Video = () => {
+const VideoCanvas = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -13,17 +13,26 @@ const Video = () => {
 
     if (!video || !canvas || !ctx) return;
 
-    video.play();
-
-    const draw = () => {
+    const render = () => {
       ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-      requestAnimationFrame(draw);
+      requestAnimationFrame(render);
     };
-    draw();
+
+    video.addEventListener("play", () => {
+      render();
+    });
+
+    video.play().catch((err) => {
+      console.error("Autoplay failed:", err);
+    });
+
+    return () => {
+      video.pause();
+    };
   }, []);
 
   return (
-    <div className="absolute top-0 left-0 w-full h-full">
+    <div className="absolute top-0 left-0 w-full h-full overflow-hidden">
       <video
         ref={videoRef}
         src="/background.mp4"
@@ -32,9 +41,14 @@ const Video = () => {
         playsInline
         style={{ display: "none" }}
       />
-      <canvas ref={canvasRef} width={1920} height={1080} className="w-full h-full object-cover" />
+      <canvas
+        ref={canvasRef}
+        width={1920}
+        height={1080}
+        className="w-full h-full object-cover"
+      />
     </div>
   );
 };
 
-export default Video;
+export default VideoCanvas;
